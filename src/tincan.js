@@ -482,6 +482,35 @@ function TCDriver_GetActivityProfile (driver, activityId, profileKey, callback) 
 }
 
 // Synchronous if callback is not provided (not recommended)
+function TCDriver_GetStatement(driver, statementId, callback) {
+    _TCDriver_Log("TCDriver_GetStatement");
+    var url,
+        lrs,
+        obj
+    if (driver.recordStores.length > 0) {
+        //
+        // for get (for now) we only get from one (as they should be the same)
+        // but it may make sense to long term try to merge statements, perhaps
+        // by using statementId as unique
+        //
+        // TODO: make this the first non-allowFail LRS but for now it should
+        // be good enough to make it the first since we know the LMS provided
+        // LRS is the first
+        //
+        lrs = driver.recordStores[0];
+
+        url = "statements/?statementId=" + statementId;
+
+        return _TCDriver_XHR_request(lrs, url, "GET", null, callback).responseText;
+    }
+    else {
+        alert("[warning] TCDriver_GetStatement: No LRSs added yet (statement not read)");
+    }
+
+
+}
+
+// Synchronous if callback is not provided (not recommended)
 function TCDriver_GetStatements (driver, sendActor, verb, activityId, callback) {
     _TCDriver_Log("TCDriver_GetStatements");
     var url,
